@@ -12,8 +12,8 @@
         </div>
         <br />
         <div>
-            <input type="number" v-model.number="op1">
-            <input type="number" v-model.number="op2">
+            <input type="text" v-model.number="op1">
+            <input type="text" v-model.number="op2">
             = {{ result }}
         </div>
         <br />
@@ -26,6 +26,29 @@
             >
                 {{ operand }}
             </button>
+        </div>
+        <br />
+        <div>
+            <input type="checkbox" id="is-keyboard" v-model="isShowKeyboard">
+            <label for="is-keyboard">Отобразить экранную клавиатуру</label>
+        </div>
+        <br />
+        <div v-if="isShowKeyboard">
+            <button
+                v-for="(digit, index) in digits"
+                @click="printDigit(digit)"
+                :key="index"
+            >
+                {{ digit }}
+            </button>
+            <button @click="removeLastDigit">&larr;</button>
+            <br />
+            <div id="app">
+                <input type="radio" id="select-input1" value="1" v-model="selectInput">
+                <label for="select-input1">Операнд 1</label>
+                <input type="radio" id="select-input2" value="2" v-model="selectInput">
+                <label for="select-input2">Операнд 2</label>
+            </div>
         </div>
         <br />
         <div v-for="(log, k) in logs" :key="k">{{ log }}</div>
@@ -43,7 +66,11 @@ export default {
             op2: 0,
             result: 0,
             error: '',
-            logs: {}
+            logs: {},
+            //
+            isShowKeyboard: true,
+            selectInput: '1',
+            digits: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         }
     },
 
@@ -54,6 +81,45 @@ export default {
     },
 
     methods: {
+        removeHelper(value) {
+            let str = value.toString();
+            if (str.length < 1) {
+                return null;
+            }
+
+            value = +(str.slice(0, -1));
+            
+            if (isNaN(value)) {
+                value = 0;
+            }
+            return value;
+        },
+
+        printDigit(digit) {
+            if ((+this.selectInput) === 1) {
+                this.op1 = +(this.op1 + digit);
+            }
+            else {
+                this.op2 = +(this.op2 + digit);
+            }
+        },
+
+        removeLastDigit() {
+            if ((+this.selectInput) === 1) {
+                const newOp = this.removeHelper(this.op1);
+                if (newOp !== null) {
+                    this.op1 = newOp;
+                }
+            }
+            else {
+                const newOp = this.removeHelper(this.op2);
+                if (newOp !== null) {
+                    this.op2 = newOp;
+                }
+            }
+        },
+
+        //
         sum() {
             this.result = this.op1 + this.op2;
         },
