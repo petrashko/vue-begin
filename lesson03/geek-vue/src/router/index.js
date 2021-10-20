@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import GeekHome from '@/views/Home.vue'
+//
+//import GeekHome from '@/views/Home.vue'
+import GeekPaypents from '@/views/Payments.vue'
 import GeekCalc from '@/views/Calc.vue'
 import GeekAbout from '@/views/About.vue'
 
@@ -9,8 +11,8 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '/',
-        name: 'home',
-        component: GeekHome
+        name: 'payments',
+        component: GeekPaypents
     },
     {
         path: '/calc',
