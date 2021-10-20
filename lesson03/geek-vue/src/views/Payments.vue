@@ -7,8 +7,20 @@
         <cost-header />
         <main>
             <div class="wrapper">
-                <cost-add-payment-form @addPayment="addToPaymentList"/>
-                <cost-payments-display :items="paymentList" />
+                <button
+                    class="my-btn"
+                    @click="showForm = !showForm"
+                >
+                    ADD NEW COST +
+                </button>
+                <br/>
+                <cost-add-payment-form
+                    @addPayment="addToPaymentList"
+                    v-if="showForm"
+                />
+                <cost-payments-display
+                    :items="paymentList"
+                />
             </div>
         </main>
     </div>
@@ -25,6 +37,7 @@ export default {
     //
     data() {
         return {
+            showForm: false,
             paymentList: []
         };
     },
@@ -79,4 +92,9 @@ export default {
     align-items: center;
 }
 
+.my-btn {
+    padding: 10px;
+    background-color: lightgreen;
+    color: #ffffff;
+}
 </style>
