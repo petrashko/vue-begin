@@ -8,7 +8,7 @@
             </thead>
             <tbody>
                 <tr v-for="(item, ind) in displayItems" :key="ind">
-                    <td>{{ ind+1 }}</td>
+                    <td>{{ item.id }}</td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.category }}</td>
                     <td>{{ item.value }}</td>
@@ -56,7 +56,7 @@ export default {
         displayItems() {
             const start = (this.numPage-1) * this.displayRecordCount
             const end = start + this.displayRecordCount;
-            const displayRecords = this.items.slice(start, end+1);
+            const displayRecords = this.items.slice(start, end);
             return displayRecords;
         }
     },
