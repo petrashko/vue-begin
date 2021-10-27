@@ -8,13 +8,32 @@
         <main>
             <div class="wrapper">
                 <p>Всего потрачено: {{ fullPaymentValue }}</p>
+                <div>
+                    Добавить платеж:
+                    <router-link
+                        :to="{name: 'addPaymentWithCat', params: {cat: 'Food'}, query: {value: 200}}"
+                    >
+                        Food 200
+                    </router-link> |
+                    <router-link
+                        :to="{name: 'addPaymentWithCat', params: {cat: 'Transport'}, query: {value: 50}}"
+                    >
+                        Transport 50
+                    </router-link> |
+                    <router-link
+                        :to="{name: 'addPaymentWithCat', params: {cat: 'Entertainment'}, query: {value: 2000}}"
+                    >
+                        Entertainment 2000
+                    </router-link>
+                </div>
+                <p></p>
                 <button
                     class="my-btn"
                     @click="onShowForm"
                 >
                     ADD NEW COST +
                 </button>
-                <br/>
+                <p></p>
                 <cost-payments-display
                     :items="paymentsList"
                 />

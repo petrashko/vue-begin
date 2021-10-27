@@ -26,8 +26,13 @@ const routes = [
         component: GeekAbout
     },
     {
-        path: '/add/payment/:cat',
+        path: '/add/payment',
         name: 'addPayment',
+        component: CostAddPaymentForm
+    },
+    {
+        path: '/add/payment/:cat',
+        name: 'addPaymentWithCat',
         component: CostAddPaymentForm
     }
 ];

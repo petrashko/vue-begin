@@ -96,6 +96,15 @@ export default {
         if (this.categoryList.length === 0) {
             this.loadCategories();
         }
+
+        const cat = this.$route.params.cat;
+        const val = +this.$route.query.value;
+        //console.log(`Category: ${cat}; Value: ${val}`);
+        if (cat && (val > 0)) {
+            this.category = cat;
+            this.value = val;
+            this.onSave();
+        }
     }
 }
 </script>
