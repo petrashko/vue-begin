@@ -10,7 +10,7 @@ const getters = {
     costsGetPaymentsList: (state) => {
         return state.paymentsList;
     },
-    
+
     costsGetFullPaymentValue: (state) => {
         return state.paymentsList.reduce((total, item) => total + item.value, 0);
     },
@@ -30,6 +30,18 @@ const mutations = {
     costsAddToPaymentsList(state, payload) {
         payload.id = state.nextId++;
         state.paymentsList.push(payload)
+    },
+
+    costsUpdatePaymentsItem(state, payload) {
+        state.paymentsList = [
+            ...state.paymentsList.slice(0, payload.index),
+            payload.item,
+            ...state.paymentsList.slice(payload.index+1)
+        ];
+    },
+
+    costsDelFromPaymentsList(state, payload) {
+        state.paymentsList = payload;
     },
 
     costSetCategoryList(state, payload) {
@@ -81,6 +93,30 @@ const actions = {
             });
     },
 
+    costsGetPaymentsItem(context, id) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const find = state.paymentsList.find(item => item.id === id);
+                if (find) {
+                    resolve(find);
+                }
+                reject('Error: not found');
+            }, 1000);
+        })
+        .then(response => {
+            //console.log(response); 
+            //resolve(response);
+            return response;
+        });
+        /*
+        .catch(error => {
+            console.log(error);
+            //reject(error);
+            return error;
+        });
+        */
+    },
+
     costsAddToPaymentsList(context, item) {
         return new Promise((resolve/*, reject*/) => {
             setTimeout(() => {
@@ -90,6 +126,54 @@ const actions = {
         .then(response => {
             //console.log(response); 
             context.commit('costsAddToPaymentsList', response);
+            //resolve(response);
+        })
+        .catch(error => {
+            console.log(error);
+            //reject(error);
+        });
+    },
+
+    costsUpdatePaymentsItem(context, item) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const index = state.paymentsList.findIndex(elem => elem.id === item.id);
+                if (index < 0) {
+                    reject('Error: not found');
+                }
+
+                const payload = {index, item};
+                resolve(payload);
+            }, 1000);
+        })
+        .then(response => {
+            //console.log(response); 
+            context.commit('costsUpdatePaymentsItem', response);
+            //resolve(response);
+        });
+        /*
+        .catch(error => {
+            console.log(error);
+            //reject(error);
+        });
+        */
+    },
+
+    costsDelFromPaymentsList(context, item) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const index = state.paymentsList.findIndex(elem => elem.id === item.id);
+                if (index < 0) {
+                    reject('Error: not found');
+                }
+
+                const newList = [...state.paymentsList.slice(0, index), ...state.paymentsList.slice(index+1)];
+                resolve(newList);
+            }, 1000);
+        })
+        .then(response => {
+            //console.log(response); 
+            context.commit('costsDelFromPaymentsList', response);
             //resolve(response);
         })
         .catch(error => {

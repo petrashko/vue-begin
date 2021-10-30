@@ -3,7 +3,7 @@
         <table class="main-table">
             <thead>
                 <tr>
-                    <th>#</th><th>Date</th><th>Category</th><th>Value</th>
+                    <th>#</th><th>Date</th><th>Category</th><th>Value</th><th></th>
                 </tr>
             </thead>
             <tbody>
@@ -12,6 +12,7 @@
                     <td>{{ item.date }}</td>
                     <td>{{ item.category }}</td>
                     <td>{{ item.value }}</td>
+                    <td><span class="span-link" @click="showContextMenu($event, item)">...</span></td>
                 </tr>
             </tbody>
         </table>
@@ -64,6 +65,18 @@ export default {
     methods: {
         changeNumPage(n) {
             this.numPage = n;
+        },
+
+        showContextMenu(ev, record) {
+            //console.log(`showContextMenu for: ${id}`);
+            //console.log(ev.target.getBoundingClientRect());
+            //
+            this.$menu.show('contextMenu', {
+                header: 'RecordID:',
+                item: record,
+                left: ev.target.getBoundingClientRect().left,
+                top: ev.target.getBoundingClientRect().top
+            });
         }
     },
     
@@ -82,5 +95,9 @@ export default {
 td { 
     padding: 10px 20px;
     border: 1px solid black;
+}
+
+.span-link {
+    cursor: pointer;
 }
 </style>

@@ -21,7 +21,7 @@
         </select>
 
         <input type="date" placeholder="Date" v-model="date" />
-        <button @click="onSave">Save</button>
+        <button @click="onSave">{{itemId !== -1 ? 'Save' : 'Add'}}</button>
         <br/><br/>
         <cost-add-category-form v-if="categoryList.length > 0" />
         <br/>
@@ -41,7 +41,9 @@ export default {
         return {
             value: 0,
             category: 'Travel',
-            date: ''
+            date: '',
+            //
+            itemId: -1
         }
     },
 
@@ -67,7 +69,7 @@ export default {
         onSave() {
             let rusDate = false;
             if (this.date) {
-                const  tmp = this.date.split('-');
+                const tmp = this.date.split('-');
                 rusDate = `${tmp[2]}.${tmp[1]}.${tmp[0]}`;
             }
             const newPayment = {
@@ -76,14 +78,29 @@ export default {
                 date: rusDate || this.getCurrentDate
             };
 
-            this.$store.dispatch('costsAddToPaymentsList', newPayment)
-                .then((/*data*/) => {
-                    //console.log(data);
-                    this.$router.push({name: 'payments'});
-                })
-                .catch((/*error*/) => {
-                    //console.log(error);
-                });
+            if (this.itemId < 0) {
+                this.$store.dispatch('costsAddToPaymentsList', newPayment)
+                    .then((/*data*/) => {
+                        //console.log(data);
+                        this.$router.push({name: 'payments'});
+                    })
+                    .catch((/*error*/) => {
+                        //console.log(error);
+                    });
+            }
+            else {
+                newPayment.id = this.itemId;
+                //
+                this.$store.dispatch('costsUpdatePaymentsItem', newPayment)
+                    .then((/*data*/) => {
+                        //console.log(data);
+                        this.$router.push({name: 'payments'});
+                    })
+                    .catch((/*error*/) => {
+                        //console.log(error);
+                    });
+            }
+
         }
     },
 
@@ -104,6 +121,24 @@ export default {
             this.category = cat;
             this.value = val;
             this.onSave();
+        }
+
+        const id = +this.$route.query.id;
+        if (!isNaN(id)) {
+            this.itemId = id;
+            //
+            this.$store.dispatch('costsGetPaymentsItem', this.itemId)
+                .then((data) => {
+                    //console.log(data);
+                    this.category = data.category;
+                    this.value = data.value;
+                    const tmp = data.date.split('.');
+                    this.date = `${tmp[2]}-${tmp[1]}-${tmp[0]}`;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.itemId = -1;
+                });
         }
     }
 }
