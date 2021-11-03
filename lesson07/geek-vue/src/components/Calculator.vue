@@ -12,17 +12,18 @@
         </div>
         <br />
         <div>
-            <input type="text" v-model.number="op1">
-            <input type="text" v-model.number="op2">
+            <input type="text" v-model.number="op1" name="op1">
+            <input type="text" v-model.number="op2" name="op2">
             = {{ result }}
         </div>
         <br />
         <div>
             <button
                 v-for="(operand, index) in operands"
-                @click="calculate(operand)"
-                :disabled="operand === '/' ? isZero : false"
                 :key="index"
+                :name="operand === '/' ? 'divide' : operand"
+                :disabled="operand === '/' ? isZero : false"
+                @click="calculate(operand)"
             >
                 {{ operand }}
             </button>
